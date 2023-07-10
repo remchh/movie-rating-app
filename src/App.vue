@@ -18,7 +18,47 @@ function updateRating(movieIndex, rating) {
 
 <template>
   <!-- This is where your template goes	-->
-  <div class="justify-center grid gap-4 md:flex md:mt-4">
+  <div class="text-2xl bg-gray-300 grid justify-items-center ">
+    <button >
+      Add movie
+    </button>
+  </div>
+
+  <div class="form grid justify-items-center bg-gray-300 text-slate-300 dark:text-slate-400 mt-2 text-2xl ">
+    <div class="input-movie-name">
+      <p>Name</p>
+      <input v-model="name" placeholder='Movie name' required>
+    </div>
+    <div class="input-movie-description">
+      <p>Description</p>
+      <textarea v-model="description" cols="30" rows="5"></textarea>
+    </div>
+    <div class="input-movie-image">
+      <p>Image</p>
+      <input v-movdel="image" placeholder="Enter url image">
+    </div>
+    <div class="select-movie-genre">
+      <div>Genres: {{ selected }}</div>
+      <select v-model="selected" multiple>
+        <option>Drama</option>
+        <option>Crime</option>
+        <option>Action</option>
+        <option>Comedy</option>
+      </select>
+    </div>
+    <div class="input-select-theaters flex flex-row gap-2">
+      <div>In theaters</div>
+      <div class="input-select">
+      <input
+        type="checkbox"
+        v-model="toggle"
+        true-value="yes"
+        false-value="no" />
+      </div>
+    </div>
+  </div>
+
+  <div class="movie-cards justify-center grid gap-4 md:flex md:mt-4">
     <div
       v-for="(item, movieIndex) in movies"
       :key="item.id"
