@@ -14,6 +14,39 @@ const description = ref('')
 const image = ref('')
 const selected = ref([])
 const toggle = ref(false)
+const createMovie = () => {
+  console.log('movie created')
+  movies.value.push({
+    id: movies.value.length + 1,
+    name: name.value,
+    description: description.value,
+    image: image.value,
+    rating: 0,
+    genres: selected.value,
+    inTheaters: toggle.value
+  })
+  console.log('cancel editing')
+  name.value = '',
+  description.value = '',
+  image.value = '',
+  selected.value = [],
+  toggle.value = false
+}
+
+const cancelEdit = () => {
+  console.log('cancel editing')
+  name.value = '',
+  description.value = '',
+  image.value = '',
+  selected.value = [],
+  toggle.value = false
+  toggleForm.value = false
+}
+
+const toggleForm = ref(false)
+const showForm = () => {
+  toggleForm.value = true
+}
 
 function updateRating(movieIndex, rating) {
   movies.value[movieIndex].rating = rating
@@ -24,11 +57,11 @@ function updateRating(movieIndex, rating) {
 <template>
   <!-- This is where your template goes	-->
   <div class="text-2xl bg-gray-300 grid justify-items-center ">
-    <button >
+    <button @click="showForm">
       Add movie
     </button>
   </div>
-  <div class="form-container flex justify-center">
+  <div v-show="toggleForm == true" class="form-container my-4 flex justify-center">
     <div class="form grid justify-items-left bg-white dark:bg-slate-800 text-white p-4 space-y-2 mt-2 text-lg rounded-md">
       <div class="input-movie-name ">
         <p>Name</p>
@@ -62,10 +95,10 @@ function updateRating(movieIndex, rating) {
         </div>
       </div>
       <div class="flex justify-between" >
-        <button class="bg-gray-600 p-1 rounded-md">
+        <button class="bg-gray-600 p-1 rounded-md" @click="cancelEdit">
           Cancel
         </button>
-        <button class="bg-blue-600 p-1 rounded-md">
+        <button class="bg-blue-600 p-1 rounded-md" @click="createMovie">
           Create
         </button>
       </div>
@@ -125,3 +158,12 @@ function updateRating(movieIndex, rating) {
 }
 
 </style>
+
+<!-- https://m.media-amazon.com/images/M/MV5BMzI0NmVkMjEtYmY4MS00ZDMxLTlkZmEtMzU4MDQxYTMzMjU2XkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_FMjpg_UX1000_.jpg
+  Spider-Man: Across the Spider-Verse
+  Miles Morales catapults across the Multiverse, where he encounters a team of Spider-People charged with protecting its very existence. When the heroes clash on how to handle a new threat, Miles must redefine what it means to be a hero.
+https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg
+  Interstellar
+  When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.
+
+-->
