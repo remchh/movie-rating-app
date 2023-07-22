@@ -61,11 +61,13 @@ function updateRating(movieIndex, rating) {
       Add movie
     </button>
   </div>
+
+  <form @submit.prevent="createMovie">
   <div v-show="toggleForm == true" class="form-container my-4 flex justify-center">
     <div class="form grid justify-items-left bg-white dark:bg-slate-800 text-white p-4 space-y-2 mt-2 text-lg rounded-md">
       <div class="input-movie-name ">
         <p>Name</p>
-        <input class="bg-slate-900 w-80 p-1 rounded-md" v-model="name" placeholder='Enter movie name' required>
+        <input class="bg-slate-900 w-80 p-1 rounded-md" v-model="name" placeholder='Enter movie name' >
       </div>
       <div class="input-movie-description">
         <p>Description</p>
@@ -98,13 +100,13 @@ function updateRating(movieIndex, rating) {
         <button class="bg-gray-600 p-1 rounded-md" @click="cancelEdit">
           Cancel
         </button>
-        <button class="bg-blue-600 p-1 rounded-md" @click="createMovie">
+        <button class="bg-blue-600 p-1 rounded-md" >
           Create
         </button>
       </div>
     </div>
   </div>
-
+  </form> 
 
   <div class="movie-cards justify-center grid gap-4 md:flex md:mt-4">
     <div
