@@ -9,11 +9,13 @@ import {ref, computed} from 'vue'
 import { StarIcon } from "@heroicons/vue/24/solid"
 
 const movies = ref(items)
+
 const name = ref('')
 const description = ref('')
 const image = ref('')
 const selected = ref([])
 const toggle = ref(false)
+
 const createMovie = () => {
   console.log('movie created')
   movies.value.push({
@@ -21,7 +23,7 @@ const createMovie = () => {
     name: name.value,
     description: description.value,
     image: image.value,
-    rating: 0,
+    rating: movies.value.rating,
     genres: selected.value,
     inTheaters: toggle.value
   })
@@ -34,13 +36,22 @@ const createMovie = () => {
 }
 
 const cancelEdit = () => {
-  console.log('cancel editing')
+  console.log('cancel creating')
   name.value = '',
   description.value = '',
   image.value = '',
   selected.value = [],
   toggle.value = false
   toggleForm.value = false
+}
+
+const deleteMovie = (index) => {
+  console.log('movie deleted', index)
+  movies.value.splice(index, 1)
+}
+
+const editMovie = () => {
+  console.log('movie edited')
 }
 
 const toggleForm = ref(false)
@@ -50,69 +61,100 @@ const showForm = () => {
 
 function updateRating(movieIndex, rating) {
   movies.value[movieIndex].rating = rating
+  console.log(rating)
+}
+
+const totalMovies = computed(() => {
+  return movies.value.length
+})
+
+
+const avRating = computed(() => {
+  let numerador = 0
+  movies.value.forEach(movie => {
+    numerador += movie.rating
+  })
+  let denominador = movies.value.length
+  let promedio = numerador / denominador
+  return promedio
+})
+
+const resetRatings = () => {
+  console.log('ratings to 0')
+  movies.value.forEach(movie => {
+    movie.rating = 0
+  })
 }
 
 </script>
 
 <template>
   <!-- This is where your template goes	-->
-  <div class="text-2xl bg-gray-300 grid justify-items-center ">
-    <button @click="showForm">
-      Add movie
-    </button>
+  <div class="flex flex-row justify-between text-lg text-white mt-4 mx-4">
+    <div>
+      Total movies: {{ totalMovies }} | Avg rating: {{ avRating }}
+    </div>
+    <div class="nav-buttons flex flex-row gap-4">
+      <button @click="showForm" class="rounded-full bg-sky-500/100 w-28">
+        Add movie
+      </button>
+      <button @click="resetRatings" class="rounded-full bg-red-600 w-40">
+        Remove ratings
+      </button>
+    </div>
   </div>
 
   <form @submit.prevent="createMovie">
-  <div v-show="toggleForm == true" class="form-container my-4 flex justify-center">
-    <div class="form grid justify-items-left bg-white dark:bg-slate-800 text-white p-4 space-y-2 mt-2 text-lg rounded-md">
-      <div class="input-movie-name ">
-        <p>Name</p>
-        <input class="bg-slate-900 w-80 p-1 rounded-md" v-model="name" placeholder='Enter movie name' >
-      </div>
-      <div class="input-movie-description">
-        <p>Description</p>
-        <textarea class="bg-slate-900 w-80 p-1 rounded-md" v-model="description" cols="30" rows="5"></textarea>
-      </div>
-      <div class="input-movie-image">
-        <p>Image</p>
-        <input class="bg-slate-900 w-80 p-1 rounded-md" v-model="image" placeholder="Enter url image">
-      </div>
-      <div class="select-movie-genre">
-        <div >Genres</div>
-        <select class="bg-slate-900 w-80 p-1 rounded-md" v-model="selected" multiple>
-          <option>Drama</option>
-          <option>Crime</option>
-          <option>Action</option>
-          <option>Comedy</option>
-        </select>
-      </div>
-      <div class="input-select-theaters flex flex-row gap-2">
-        <div>In theaters</div>
-        <div class="input-select">
-        <input
-          type="checkbox"
-          v-model="toggle"
-          true-value="yes"
-          false-value="no" />
+    <div v-show="toggleForm == true" class="form-container my-4 flex justify-center">
+      <div class="form grid justify-items-left bg-white dark:bg-slate-800 text-white p-4 space-y-2 mt-2 text-lg rounded-md">
+        <div class="input-movie-name ">
+          <p>Name</p>
+          <input class="bg-slate-900 w-80 p-1 rounded-md" v-model="name" placeholder='Enter movie name' >
+        </div>
+        <div class="input-movie-description">
+          <p>Description</p>
+          <textarea class="bg-slate-900 w-80 p-1 rounded-md" v-model="description" cols="30" rows="5"></textarea>
+        </div>
+        <div class="input-movie-image">
+          <p>Image</p>
+          <input class="bg-slate-900 w-80 p-1 rounded-md" v-model="image" placeholder="Enter url image">
+        </div>
+        <div class="select-movie-genre">
+          <div >Genres</div>
+          <select class="bg-slate-900 w-80 p-1 rounded-md" v-model="selected" multiple>
+            <option>Drama</option>
+            <option>Crime</option>
+            <option>Action</option>
+            <option>Comedy</option>
+          </select>
+        </div>
+        <div class="input-select-theaters flex flex-row gap-2">
+          <div>In theaters</div>
+          <div class="input-select">
+          <input
+            type="checkbox"
+            v-model="toggle"
+            true-value="yes"
+            false-value="no" />
+          </div>
+        </div>
+        <div class="flex justify-between" >
+          <button type='button' class="bg-gray-600 p-1 rounded-md" @click="cancelEdit">
+            Cancel
+          </button>
+          <button type='submit' class="bg-blue-600 p-1 rounded-md" >
+            Create
+          </button>
         </div>
       </div>
-      <div class="flex justify-between" >
-        <button class="bg-gray-600 p-1 rounded-md" @click="cancelEdit">
-          Cancel
-        </button>
-        <button class="bg-blue-600 p-1 rounded-md" >
-          Create
-        </button>
-      </div>
     </div>
-  </div>
   </form> 
 
   <div class="movie-cards justify-center grid gap-4 md:flex md:mt-4">
     <div
       v-for="(item, movieIndex) in movies"
       :key="item.id"
-    >
+      >
       <div class="h-full bg-white dark:bg-slate-800 rounded-lg px-6 py-8 max-w-sm" >
         <div class="max-w-sm relative ">
           <div class="flex justify-center items-center absolute top-0 right-0 h-12 w-12">
@@ -137,16 +179,22 @@ function updateRating(movieIndex, rating) {
         <p class="text-slate-500 dark:text-slate-400 mt-2"> 
         Rating: ({{ item.rating}}/5 ) 
         </p>
-        <div class="flex flex-row">
-          <button
-            v-for="star in 5"
-            :key="star"
-            :style="{color: star <= item.rating  ? '#FFD700' : ''}"
-            :class="star === item.rating ? 'disable' : ''"
-            @click="updateRating(movieIndex, star)"
-          >
-          <StarIcon ref='star' class="h-6 w-6" />
-          </button>
+        <div class="flex flex-row justify-between">
+          <div class="stars">
+              <button
+              v-for="star in 5"
+              :key="star"
+              :style="{color: star <= item.rating  ? '#FFD700' : ''}"
+              :class="star === item.rating ? 'disable' : ''"
+              @click="updateRating(movieIndex, star)"
+              >
+              <StarIcon ref='star' class="h-6 w-6" />
+            </button>
+          </div>
+          <div class="edit flex flex-row gap-2">
+            <button @click='deleteMovie(movieIndex)' class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center"> X </button>
+            <button @click='editMovie' class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center"> ! </button>
+          </div>
         </div>
       </div>
     </div>
