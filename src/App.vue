@@ -10,11 +10,11 @@ import { StarIcon } from "@heroicons/vue/24/solid"
 
 const movies = ref(items)
 
-const name = ref('')
-const description = ref('')
-const image = ref('')
-const selected = ref([])
-const toggle = ref(false)
+let name = ref('')
+let description = ref('')
+let image = ref('')
+let selected = ref([])
+let toggle = ref(false)
 
 const createMovie = () => {
   console.log('movie created')
@@ -45,18 +45,26 @@ const cancelEdit = () => {
   toggleForm.value = false
 }
 
+const toggleForm = ref(false)
+const showForm = () => {
+  toggleForm.value = true
+}
+
 const deleteMovie = (index) => {
   console.log('movie deleted', index)
   movies.value.splice(index, 1)
 }
 
-const editMovie = () => {
-  console.log('movie edited')
-}
-
-const toggleForm = ref(false)
-const showForm = () => {
+const editMovie = (index) => {
+  console.log('movie edited', index)
   toggleForm.value = true
+      //let index = this.notes.findIndex(note => note.id === id)
+      //this.notes[index].content = content
+  name.value = movies.value[index].name
+  description.value = movies.value[index].description
+  image.value = movies.value[index].image
+  selected.value = movies.value[index].genres
+  toggle.value = movies.value[index].inTheaters
 }
 
 function updateRating(movieIndex, rating) {
@@ -90,7 +98,7 @@ const resetRatings = () => {
 
 <template>
   <!-- This is where your template goes	-->
-  <div class="flex flex-row justify-between text-lg text-white mt-4 mx-4">
+  <div class="flex flex-col items-center gap-2 md:flex-row justify-between text-lg text-white p-4">
     <div>
       Total movies: {{ totalMovies }} | Avg rating: {{ avRating }}
     </div>
@@ -150,6 +158,52 @@ const resetRatings = () => {
     </div>
   </form> 
 
+  <form @submit.prevent="editMovie">
+    <div v-show="toggleForm == true" class="form-container my-4 flex justify-center">
+      <div class="form grid justify-items-left bg-white dark:bg-slate-800 text-white p-4 space-y-2 mt-2 text-lg rounded-md">
+        <div class="input-movie-name ">
+          <p>Name</p>
+          <input class="bg-slate-900 w-80 p-1 rounded-md" v-model="name" placeholder='Enter movie name' >
+        </div>
+        <div class="input-movie-description">
+          <p>Description</p>
+          <textarea class="bg-slate-900 w-80 p-1 rounded-md" v-model="description" cols="30" rows="5"></textarea>
+        </div>
+        <div class="input-movie-image">
+          <p>Image</p>
+          <input class="bg-slate-900 w-80 p-1 rounded-md" v-model="image" placeholder="Enter url image">
+        </div>
+        <div class="select-movie-genre">
+          <div >Genres</div>
+          <select class="bg-slate-900 w-80 p-1 rounded-md" v-model="selected" multiple>
+            <option>Drama</option>
+            <option>Crime</option>
+            <option>Action</option>
+            <option>Comedy</option>
+          </select>
+        </div>
+        <div class="input-select-theaters flex flex-row gap-2">
+          <div>In theaters</div>
+          <div class="input-select">
+          <input
+            type="checkbox"
+            v-model="toggle"
+            true-value="yes"
+            false-value="no" />
+          </div>
+        </div>
+        <div class="flex justify-between" >
+          <button type='button' class="bg-gray-600 p-1 rounded-md" @click="cancelEdit">
+            Cancel
+          </button>
+          <button type='submit' class="bg-blue-600 p-1 rounded-md" >
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </form> 
+
   <div class="movie-cards justify-center grid gap-4 md:flex md:mt-4">
     <div
       v-for="(item, movieIndex) in movies"
@@ -193,7 +247,7 @@ const resetRatings = () => {
           </div>
           <div class="edit flex flex-row gap-2">
             <button @click='deleteMovie(movieIndex)' class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center"> X </button>
-            <button @click='editMovie' class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center"> ! </button>
+            <button @click='editMovie(movieIndex)' class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center"> ! </button>
           </div>
         </div>
       </div>
