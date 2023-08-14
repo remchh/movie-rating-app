@@ -6,15 +6,25 @@ import {ref, computed} from 'vue'
  This is an Icon that you can use to represent the stars if you like
  otherwise you could just use a simple ⭐️ emoji, or * character.
 */
-import { StarIcon } from "@heroicons/vue/24/solid"
+import { StarIcon, TrashIcon, PencilIcon } from "@heroicons/vue/24/solid"
 
 const movies = ref(items)
 
+
+let id = ref(null)
 let name = ref('')
 let description = ref('')
 let image = ref('')
 let selected = ref([])
 let toggle = ref(false)
+
+function saveMovie() {
+  if (id.value) {
+    updateMovie();
+  } else {
+    createMovie();
+  }
+}
 
 const createMovie = () => {
   console.log('movie created')
@@ -27,21 +37,25 @@ const createMovie = () => {
     genres: selected.value,
     inTheaters: toggle.value
   })
-  console.log('cancel editing')
   name.value = '',
   description.value = '',
   image.value = '',
   selected.value = [],
   toggle.value = false
+  console.log('values reseted')
+
+  toggleForm.value = false
 }
 
 const cancelEdit = () => {
   console.log('cancel creating')
+  id.value = null
   name.value = '',
   description.value = '',
   image.value = '',
   selected.value = [],
   toggle.value = false
+
   toggleForm.value = false
 }
 
@@ -50,21 +64,55 @@ const showForm = () => {
   toggleForm.value = true
 }
 
+
 const deleteMovie = (index) => {
   console.log('movie deleted', index)
   movies.value.splice(index, 1)
 }
 
+
 const editMovie = (index) => {
   console.log('movie edited', index)
-  toggleForm.value = true
-      //let index = this.notes.findIndex(note => note.id === id)
-      //this.notes[index].content = content
-  name.value = movies.value[index].name
-  description.value = movies.value[index].description
-  image.value = movies.value[index].image
-  selected.value = movies.value[index].genres
-  toggle.value = movies.value[index].inTheaters
+  const movie = movies.value[index]
+
+  id.value = movie.id
+  name.value = movie.name
+  description.value = movie.description
+  image.value = movie.image
+  selected.value = movie.genres
+  toggle.value = movie.inTheaters
+
+  showForm()
+}
+
+
+const updateMovie = () => {
+  console.log('movie updated')
+
+  const movie = {
+    id: id.value,
+    name: name.value,
+    description: description.value,
+    image: image.value,
+    genres: selected.value,
+    inTheaters: toggle.value,
+    rating: 0
+  }
+  movies.value = movies.value.map((m) => {
+    if (m.id === movie.id) {
+      movie.rating = m.rating
+      return movie
+    }
+    return m
+  })
+  name.value = '',
+  description.value = '',
+  image.value = '',
+  selected.value = [],
+  toggle.value = false
+  console.log('values reseted')
+
+  toggleForm.value = false
 }
 
 function updateRating(movieIndex, rating) {
@@ -112,7 +160,7 @@ const resetRatings = () => {
     </div>
   </div>
 
-  <form @submit.prevent="createMovie">
+  <form @submit.prevent="saveMovie">
     <div v-show="toggleForm == true" class="form-container my-4 flex justify-center">
       <div class="form grid justify-items-left bg-white dark:bg-slate-800 text-white p-4 space-y-2 mt-2 text-lg rounded-md">
         <div class="input-movie-name ">
@@ -129,7 +177,7 @@ const resetRatings = () => {
         </div>
         <div class="select-movie-genre">
           <div >Genres</div>
-          <select class="bg-slate-900 w-80 p-1 rounded-md" v-model="selected" multiple>
+          <select class="bg-slate-900 w-80 p-1 rounded-md" v-model="selected" multiple name="genre">
             <option>Drama</option>
             <option>Crime</option>
             <option>Action</option>
@@ -142,8 +190,8 @@ const resetRatings = () => {
           <input
             type="checkbox"
             v-model="toggle"
-            true-value="yes"
-            false-value="no" />
+            :true-value="true"
+            :false-value="false" />
           </div>
         </div>
         <div class="flex justify-between" >
@@ -151,15 +199,16 @@ const resetRatings = () => {
             Cancel
           </button>
           <button type='submit' class="bg-blue-600 p-1 rounded-md" >
-            Create
+            <span v-if="id">Update</span>
+            <span v-else>Create</span>
           </button>
         </div>
       </div>
     </div>
   </form> 
 
-  <form @submit.prevent="editMovie">
-    <div v-show="toggleForm == true" class="form-container my-4 flex justify-center">
+  <!-- <form @submit.prevent="saveMovie">
+    <div v-show="toggleFormEdit == true" class="form-container my-4 flex justify-center">
       <div class="form grid justify-items-left bg-white dark:bg-slate-800 text-white p-4 space-y-2 mt-2 text-lg rounded-md">
         <div class="input-movie-name ">
           <p>Name</p>
@@ -202,7 +251,7 @@ const resetRatings = () => {
         </div>
       </div>
     </div>
-  </form> 
+  </form> -->
 
   <div class="movie-cards justify-center grid gap-4 md:flex md:mt-4">
     <div
@@ -246,8 +295,12 @@ const resetRatings = () => {
             </button>
           </div>
           <div class="edit flex flex-row gap-2">
-            <button @click='deleteMovie(movieIndex)' class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center"> X </button>
-            <button @click='editMovie(movieIndex)' class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center"> ! </button>
+            <button @click='deleteMovie(movieIndex)' class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center hover:bg-red-500"> 
+            <TrashIcon class="h-5 w-5" />
+            </button>
+            <button @click='editMovie(movieIndex)' class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center hover:bg-sky-500"> 
+            <PencilIcon class="h-5 w-5" />
+            </button>
           </div>
         </div>
       </div>
