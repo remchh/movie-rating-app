@@ -1,12 +1,14 @@
 <script setup>
 import { items } from "./movies.json"
 import {ref, computed} from 'vue'
+import MovieItem from "./components/MovieItem.vue"
 
 /*
  This is an Icon that you can use to represent the stars if you like
  otherwise you could just use a simple ⭐️ emoji, or * character.
+
+import { StarIcon, TrashIcon, PencilIcon } from "@heroicons/vue/24/solid" 
 */
-import { StarIcon, TrashIcon, PencilIcon } from "@heroicons/vue/24/solid"
 
 const movies = ref(items)
 
@@ -207,105 +209,21 @@ const resetRatings = () => {
     </div>
   </form> 
 
-  <!-- <form @submit.prevent="saveMovie">
-    <div v-show="toggleFormEdit == true" class="form-container my-4 flex justify-center">
-      <div class="form grid justify-items-left bg-white dark:bg-slate-800 text-white p-4 space-y-2 mt-2 text-lg rounded-md">
-        <div class="input-movie-name ">
-          <p>Name</p>
-          <input class="bg-slate-900 w-80 p-1 rounded-md" v-model="name" placeholder='Enter movie name' >
-        </div>
-        <div class="input-movie-description">
-          <p>Description</p>
-          <textarea class="bg-slate-900 w-80 p-1 rounded-md" v-model="description" cols="30" rows="5"></textarea>
-        </div>
-        <div class="input-movie-image">
-          <p>Image</p>
-          <input class="bg-slate-900 w-80 p-1 rounded-md" v-model="image" placeholder="Enter url image">
-        </div>
-        <div class="select-movie-genre">
-          <div >Genres</div>
-          <select class="bg-slate-900 w-80 p-1 rounded-md" v-model="selected" multiple>
-            <option>Drama</option>
-            <option>Crime</option>
-            <option>Action</option>
-            <option>Comedy</option>
-          </select>
-        </div>
-        <div class="input-select-theaters flex flex-row gap-2">
-          <div>In theaters</div>
-          <div class="input-select">
-          <input
-            type="checkbox"
-            v-model="toggle"
-            true-value="yes"
-            false-value="no" />
-          </div>
-        </div>
-        <div class="flex justify-between" >
-          <button type='button' class="bg-gray-600 p-1 rounded-md" @click="cancelEdit">
-            Cancel
-          </button>
-          <button type='submit' class="bg-blue-600 p-1 rounded-md" >
-            Update
-          </button>
-        </div>
-      </div>
-    </div>
-  </form> -->
+  <MovieItem
+    v-for="(movie, movieIndex) in movies" 
+    :key="movie.id"
+    :name="movie.name"
+    :description="movie.description"
+    :image="movie.image"
+    :rating="movie.rating"
+    :selected="movie.genres"
+    :movieIndex="movieIndex"
+    v-bind="movie"
+    @edit-movie="editMovie"
+    @delete-movie="deleteMovie"
+    @update-rating="updateRating"
+  />
 
-  <div class="movie-cards justify-center grid gap-4 md:flex md:mt-4">
-    <div
-      v-for="(item, movieIndex) in movies"
-      :key="item.id"
-      >
-      <div class="h-full bg-white dark:bg-slate-800 rounded-lg px-6 py-8 max-w-sm" >
-        <div class="max-w-sm relative ">
-          <div class="flex justify-center items-center absolute top-0 right-0 h-12 w-12">
-            <div class="absolute ">
-              {{ item.rating }}
-            </div>
-            <StarIcon :style="{color: item.rating >= 1  ? '#FFD700' : ''}" />
-          </div>
-          <img :src="item.image" class="h-[500px]"> 
-        </div>
-        <p class="text-slate-500 dark:text-slate-400 mt-2 text-2xl">
-          {{ item.name }}
-        </p>
-        <div class="flex flex-row gap-4 ">
-          <div v-for='gen in item.genres' class="bg-cyan-800 w-16 text-center rounded-md text-slate-500 dark:text-slate-400 mt-2 text-sm">
-            {{ gen }}
-          </div>
-        </div>
-        <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm">
-          {{ item.description }}
-        </p>
-        <p class="text-slate-500 dark:text-slate-400 mt-2"> 
-        Rating: ({{ item.rating}}/5 ) 
-        </p>
-        <div class="flex flex-row justify-between">
-          <div class="stars">
-              <button
-              v-for="star in 5"
-              :key="star"
-              :style="{color: star <= item.rating  ? '#FFD700' : ''}"
-              :class="star === item.rating ? 'disable' : ''"
-              @click="updateRating(movieIndex, star)"
-              >
-              <StarIcon ref='star' class="h-6 w-6" />
-            </button>
-          </div>
-          <div class="edit flex flex-row gap-2">
-            <button @click='deleteMovie(movieIndex)' class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center hover:bg-red-500"> 
-            <TrashIcon class="h-5 w-5" />
-            </button>
-            <button @click='editMovie(movieIndex)' class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center hover:bg-sky-500"> 
-            <PencilIcon class="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
 </template>
 
