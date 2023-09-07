@@ -2,6 +2,7 @@
 import { items } from "./movies.json"
 import {ref, computed} from 'vue'
 import MovieItem from "./components/MovieItem.vue"
+import MovieForm from "./components/MovieForm.vue"
 
 /*
  This is an Icon that you can use to represent the stars if you like
@@ -162,52 +163,17 @@ const resetRatings = () => {
     </div>
   </div>
 
-  <form @submit.prevent="saveMovie">
-    <div v-show="toggleForm == true" class="form-container my-4 flex justify-center">
-      <div class="form grid justify-items-left bg-white dark:bg-slate-800 text-white p-4 space-y-2 mt-2 text-lg rounded-md">
-        <div class="input-movie-name ">
-          <p>Name</p>
-          <input class="bg-slate-900 w-80 p-1 rounded-md" v-model="name" placeholder='Enter movie name' >
-        </div>
-        <div class="input-movie-description">
-          <p>Description</p>
-          <textarea class="bg-slate-900 w-80 p-1 rounded-md" v-model="description" cols="30" rows="5"></textarea>
-        </div>
-        <div class="input-movie-image">
-          <p>Image</p>
-          <input class="bg-slate-900 w-80 p-1 rounded-md" v-model="image" placeholder="Enter url image">
-        </div>
-        <div class="select-movie-genre">
-          <div >Genres</div>
-          <select class="bg-slate-900 w-80 p-1 rounded-md" v-model="selected" multiple name="genre">
-            <option>Drama</option>
-            <option>Crime</option>
-            <option>Action</option>
-            <option>Comedy</option>
-          </select>
-        </div>
-        <div class="input-select-theaters flex flex-row gap-2">
-          <div>In theaters</div>
-          <div class="input-select">
-          <input
-            type="checkbox"
-            v-model="toggle"
-            :true-value="true"
-            :false-value="false" />
-          </div>
-        </div>
-        <div class="flex justify-between" >
-          <button type='button' class="bg-gray-600 p-1 rounded-md" @click="cancelEdit">
-            Cancel
-          </button>
-          <button type='submit' class="bg-blue-600 p-1 rounded-md" >
-            <span v-if="id">Update</span>
-            <span v-else>Create</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </form> 
+  <MovieForm
+    v-model:name="name"
+    v-model:description="description"
+    v-model:image="image"
+    v-model:selected="selected"
+    v-model:toggle="toggle"
+    :id="id"
+    :toggleForm="toggleForm"
+    @save-movie="saveMovie"
+    @cancel-edit="cancelEdit"
+  />
 
   <MovieItem
     v-for="(movie, movieIndex) in movies" 

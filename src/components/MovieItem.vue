@@ -8,12 +8,7 @@ defineEmits(['edit-movie', 'delete-movie', 'update-rating'])
 </script> 
 
 <template>
-  <!--<div class="bg-white rounded-lg flex justify-center">
-    <h2> Testing Component </h2>
-  </div> -->
-  
   <div class="movie-cards justify-center grid gap-4 md:flex md:mt-4">
-
       <div class="h-full bg-white dark:bg-slate-800 rounded-lg px-6 py-8 max-w-sm" >
         <div class="max-w-sm relative ">
           <div class="flex justify-center items-center absolute top-0 right-0 h-12 w-12">
@@ -60,6 +55,5 @@ defineEmits(['edit-movie', 'delete-movie', 'update-rating'])
           </div>
         </div>
       </div>
-
   </div>
 </template>
