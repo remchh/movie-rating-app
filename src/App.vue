@@ -3,6 +3,7 @@ import { items } from "./movies.json"
 import {ref, computed} from 'vue'
 import MovieItem from "./components/MovieItem.vue"
 import MovieForm from "./components/MovieForm.vue"
+import Modal from "./components/Modal.vue"
 
 /*
  This is an Icon that you can use to represent the stars if you like
@@ -190,6 +191,10 @@ const resetRatings = () => {
     @update-rating="updateRating"
   />
 
+  <Modal 
+    :toggleForm="toggleForm" 
+    @cancel-edit="cancelEdit"
+  />
 
 </template>
 

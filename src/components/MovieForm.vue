@@ -1,15 +1,32 @@
 <script setup>
 
-defineProps({
+import { onUpdated } from 'vue'
+
+onUpdated(() => {
+  console.log(props.toggle)
+})
+
+const props = defineProps({
   name: String,
   description: String,
   image: String,
   selected: Array,
-  toggle: [Boolean, String],
+  toggle: Boolean,
   toggleForm: Boolean,
   id: Number
 })
-defineEmits(['save-movie', 'cancel-edit', 'update:name', 'update:description', 'update:image', 'update:selected', 'update:toggle', 'update:toggleForm'])
+const emit = defineEmits(['save-movie', 'cancel-edit', 'update:name', 'update:description', 'update:image', 'update:selected', 'update:toggle'])
+
+const updateSelected = (event) => {
+  const selectedValues = Array.from(event.target.selectedOptions, (option) => option.value);
+  emit('update:selected', selectedValues);
+}
+
+const updateToggle = () => {
+  emit('update:toggle', !props.toggle);
+}
+
+console.log(props.toggle)
 
 </script>
 
@@ -52,7 +69,7 @@ defineEmits(['save-movie', 'cancel-edit', 'update:name', 'update:description', '
           <div >Genres</div>
           <select
             :value="selected"
-            @input="$emit('update:selected', $event.target.value)"
+            @input="updateSelected"
             class="bg-slate-900 w-80 p-1 rounded-md"
             name="genre"
             multiple
@@ -69,7 +86,7 @@ defineEmits(['save-movie', 'cancel-edit', 'update:name', 'update:description', '
           <input
             type="checkbox"
             :value="toggle"
-            @input="$emit('update:toggle', $event.target.value)"
+            @input="updateToggle"
             :true-value="true"
             :false-value="false" />
           </div>
