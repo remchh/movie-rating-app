@@ -164,6 +164,10 @@ const resetRatings = () => {
     </div>
   </div>
 
+<Modal :toggleForm="toggleForm" @cancel-edit="cancelEdit">
+  <template #title>
+   Add Movie
+  </template>
   <MovieForm
     v-model:name="name"
     v-model:description="description"
@@ -175,6 +179,8 @@ const resetRatings = () => {
     @save-movie="saveMovie"
     @cancel-edit="cancelEdit"
   />
+</Modal>
+
 
   <MovieItem
     v-for="(movie, movieIndex) in movies" 
@@ -189,11 +195,6 @@ const resetRatings = () => {
     @edit-movie="editMovie"
     @delete-movie="deleteMovie"
     @update-rating="updateRating"
-  />
-
-  <Modal 
-    :toggleForm="toggleForm" 
-    @cancel-edit="cancelEdit"
   />
 
 </template>

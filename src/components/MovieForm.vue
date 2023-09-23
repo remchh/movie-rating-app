@@ -15,7 +15,7 @@ const props = defineProps({
   toggleForm: Boolean,
   id: Number
 })
-const emit = defineEmits(['save-movie', 'cancel-edit', 'update:name', 'update:description', 'update:image', 'update:selected', 'update:toggle'])
+const emit = defineEmits(['save-movie', 'cancel-edit', 'update:name', 'update:description', 'update:image', 'update:selected', 'update:toggle', 'update:toggleForm'])
 
 const updateSelected = (event) => {
   const selectedValues = Array.from(event.target.selectedOptions, (option) => option.value);
@@ -32,8 +32,8 @@ console.log(props.toggle)
 
 <template>
   <form @submit.prevent="$emit('save-movie')">
-    <div v-show="toggleForm == true" class="form-container my-4 flex justify-center">
-      <div class="form grid justify-items-left bg-white dark:bg-slate-800 text-white p-4 space-y-2 mt-2 text-lg rounded-md">
+    <div v-show="toggleForm == true" >
+      <div class="grid justify-items-left bg-white dark:bg-slate-800 text-white p-4 space-y-2 mt-2 text-lg rounded-md">
         <div class="input-movie-name ">
           <p>Name</p>
           <input
@@ -104,3 +104,9 @@ console.log(props.toggle)
     </div>
   </form> 
 </template>
+
+<!-- max-w-full flex flex-col items-center justify-center h-screen mx-auto relative space-y-8 -->
+
+<!-- fixed inset-0 flex items-center justify-center my-4 z-20 bg-gray-800/40 backdrop-blur -->
+
+<!-- relative shrink-0 w-full max-w-2xl rounded-md flex flex-col shadow-2xl bg-white dark:bg-gray-800 dark:text-white -->
