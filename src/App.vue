@@ -1,9 +1,16 @@
 <script setup>
 import { items } from "./movies.json"
-import {ref, computed} from 'vue'
+import {ref, computed, defineAsyncComponent} from 'vue'
+
 import MovieItem from "./components/MovieItem.vue"
-import MovieForm from "./components/MovieForm.vue"
-import Modal from "./components/Modal.vue"
+
+const MovieForm = defineAsyncComponent(() =>
+ import('./components/MovieForm.vue')
+)
+
+const Modal = defineAsyncComponent(() => 
+ import('./components/Modal.vue')
+)
 
 /*
  This is an Icon that you can use to represent the stars if you like
