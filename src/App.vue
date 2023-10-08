@@ -171,23 +171,24 @@ const resetRatings = () => {
     </div>
   </div>
 
-<Modal :toggleForm="toggleForm" @cancel-edit="cancelEdit">
-  <template #title>
-   Add Movie
-  </template>
-  <MovieForm
-    v-model:name="name"
-    v-model:description="description"
-    v-model:image="image"
-    v-model:selected="selected"
-    v-model:toggle="toggle"
-    :id="id"
-    :toggleForm="toggleForm"
-    @save-movie="saveMovie"
-    @cancel-edit="cancelEdit"
-  />
-</Modal>
-
+<Transition name="slide-fade">
+  <Modal :toggleForm="toggleForm" @cancel-edit="cancelEdit">
+    <template #title>
+    Add Movie
+    </template>
+    <MovieForm
+      v-model:name="name"
+      v-model:description="description"
+      v-model:image="image"
+      v-model:selected="selected"
+      v-model:toggle="toggle"
+      :id="id"
+      :toggleForm="toggleForm"
+      @save-movie="saveMovie"
+      @cancel-edit="cancelEdit"
+    />
+  </Modal>
+</Transition>
 
   <MovieItem
     v-for="(movie, movieIndex) in movies" 
@@ -209,6 +210,19 @@ const resetRatings = () => {
 <style scoped>
 .disable {
   cursor: not-allowed;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+.slide-fade-leave-active {
+  transition: all 0.4s;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(-50px);
+  opacity: 0;
 }
 
 </style>
