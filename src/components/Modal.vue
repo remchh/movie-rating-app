@@ -1,13 +1,6 @@
 <script setup>
 import { XMarkIcon } from "@heroicons/vue/20/solid";
 
-// Props
-const { visible } = props;
-
-// Methods
-const closeModal = () => {
-  // Emit an event or update a prop to hide the modal
-};
 
 const props = defineProps(['toggleForm'])
 const emit = defineEmits(['cancel-edit'])
@@ -16,8 +9,8 @@ const emit = defineEmits(['cancel-edit'])
 
 
 <template>
-  <div v-show="toggleForm == true" class="fixed inset-0 flex items-center justify-center z-20 bg-gray-800/40 backdrop-blur" >
-
+  <div v-if="toggleForm == true" class="fixed inset-0 flex items-center justify-center z-20 bg-gray-800/40 backdrop-blur" >
+      <!-- <h3 class="modal-title" v-if="title">{{ title }}</h3> -->
       <div class="absolute top-20 uppercase text-lg text-white">
         <slot name="title"></slot>
       </div>

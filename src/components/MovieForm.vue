@@ -1,10 +1,10 @@
 <script setup>
 
-import { onUpdated } from 'vue'
+import {ref, onMounted} from 'vue'
 
-onUpdated(() => {
-  console.log(props.toggle)
-})
+
+const nameInput = ref(null)
+
 
 const props = defineProps({
   name: String,
@@ -18,15 +18,21 @@ const props = defineProps({
 const emit = defineEmits(['save-movie', 'cancel-edit', 'update:name', 'update:description', 'update:image', 'update:selected', 'update:toggle', 'update:toggleForm'])
 
 const updateSelected = (event) => {
-  const selectedValues = Array.from(event.target.selectedOptions, (option) => option.value);
-  emit('update:selected', selectedValues);
+  const selectedValues = Array.from(event.target.selectedOptions, (option) => option.value)
+  emit('update:selected', selectedValues)
 }
 
 const updateToggle = () => {
-  emit('update:toggle', !props.toggle);
+  emit('update:toggle', !props.toggle)
 }
 
-console.log(props.toggle)
+
+onMounted(() => {
+  console.log(props.toggle)    
+  nameInput.value.focus()
+  console.log(nameInput.value)
+})
+
 
 </script>
 
@@ -37,6 +43,8 @@ console.log(props.toggle)
         <div class="input-movie-name ">
           <p>Name</p>
           <input
+            ref="nameInput"
+            autofocus
             type="text"
             :value="name"
             @input="$emit('update:name', $event.target.value)"

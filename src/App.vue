@@ -1,8 +1,9 @@
 <script setup>
 import { items } from "./movies.json"
-import {ref, computed, defineAsyncComponent} from 'vue'
+import {ref, computed, defineAsyncComponent } from 'vue'
 
 import MovieItem from "./components/MovieItem.vue"
+
 
 const MovieForm = defineAsyncComponent(() =>
  import('./components/MovieForm.vue')
@@ -19,8 +20,10 @@ const Modal = defineAsyncComponent(() =>
 import { StarIcon, TrashIcon, PencilIcon } from "@heroicons/vue/24/solid" 
 */
 
-const movies = ref(items)
+/*const movieFormRef = ref(null)*/
 
+
+const movies = ref(items)
 
 let id = ref(null)
 let name = ref('')
@@ -73,6 +76,7 @@ const cancelEdit = () => {
 const toggleForm = ref(false)
 const showForm = () => {
   toggleForm.value = true
+  /*movieFormRef.value.focusInput()*/
 }
 
 
@@ -153,6 +157,8 @@ const resetRatings = () => {
   })
 }
 
+
+
 </script>
 
 <template>
@@ -172,9 +178,9 @@ const resetRatings = () => {
   </div>
 
 <Transition name="slide-fade">
-  <Modal :toggleForm="toggleForm" @cancel-edit="cancelEdit">
+  <Modal :toggleForm="toggleForm" @cancel-edit="cancelEdit" >
     <template #title>
-    Add Movie
+      Add Movie
     </template>
     <MovieForm
       v-model:name="name"
