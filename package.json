@@ -12,7 +12,8 @@
     "@heroicons/vue": "^2.0.16",
     "@tailwindcss/typography": "^0.5.9",
     "happy-dom": "^8.9.0",
-    "vue": "^3.2.38"
+    "vue": "^3.2.38",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",

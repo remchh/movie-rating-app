@@ -1,8 +1,8 @@
 <script setup>
-import { StarIcon, TrashIcon, PencilIcon } from "@heroicons/vue/24/solid"
+import { StarIcon, TrashIcon, PencilIcon, EyeIcon } from "@heroicons/vue/24/solid"
 
 defineProps(['key', 'name', 'image', 'description', 'genres', 'rating', 'movie', 'movieIndex'])
-defineEmits(['edit-movie', 'delete-movie', 'update-rating'])
+defineEmits(['edit-movie', 'delete-movie', 'update-rating', 'view-movie'])
 
 
 </script> 
@@ -51,6 +51,9 @@ defineEmits(['edit-movie', 'delete-movie', 'update-rating'])
             </button>
             <button @click="$emit('edit-movie', movieIndex)" class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center hover:bg-sky-500"> 
             <PencilIcon class="h-5 w-5" />
+            </button>
+            <button @click="$emit('view-movie', movieIndex)" class="rounded-full bg-gray-300 w-8 h-8 flex items-center justify-center hover:bg-sky-500"> 
+            <EyeIcon class="h-5 w-5" />
             </button>
           </div>
         </div>
